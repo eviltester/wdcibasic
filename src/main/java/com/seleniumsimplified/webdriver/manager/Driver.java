@@ -40,7 +40,7 @@ public class Driver extends Thread{
 
     private static final  String DEFAULT_BROWSER = "GOOGLECHROME";
 
-    public enum BrowserName{FIREFOX, FIREFOXLEGACY, GOOGLECHROME, SAUCELABS, IE, HTMLUNIT, GRID, FIREFOXPORTABLE, FIREFOXMARIONETTE, APPIUM, EDGE}
+    public enum BrowserName{FIREFOX, GOOGLECHROME, SAUCELABS, IE, HTMLUNIT, GRID, APPIUM, EDGE}
 
     public static BrowserName currentDriver;
 
@@ -66,84 +66,20 @@ public class Driver extends Thread{
 
         if(useThisDriver == null){
 
-
             //String defaultBrowser = System.getProperty(BROWSER_PROPERTY_NAME, DEFAULT_BROWSER);
             // to allow setting the browser as a property or an environment variable
             String defaultBrowser = EnvironmentPropertyReader.getPropertyOrEnv(BROWSER_PROPERTY_NAME, DEFAULT_BROWSER);
 
-            /* Note:
-                    I generally use the Java 1.7 format that you can see below this chunk
-                    of code. where the switch statement uses a String.
-
-                    Java 1.6 does not support this, since people have tried to use this code
-                    on older versions of Java, and this is really the only Java 1.7 specific
-                    functionality that I use. I have converted this code to Java 1.6 with a
-                    series of if statements to replicate the switch statement.
-
-                    I could have used an enum, or refactored it to use objects
-                    but I wanted to keep the code simple.
-
-                    Hence the reason this code is different from what you might see in the
-                    lecture. But I have left this comment in to explain the situation.
-             */
-            if("FIREFOX".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.FIREFOX;
-
-            if("FIREFOXLEGACY".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.FIREFOXLEGACY;
-
-            if("FIREFOXPORTABLE".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.FIREFOXPORTABLE;
-
-            // Firefox is for the inbuilt plugin driver, marionette is the newer .exe driver
-            // see the
-            // package com.seleniumsimplified.webdriver.drivers;
-            //  FirefoxMarionetteDriverTest.java for more details
-            if("FIREFOXMARIONETTE".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.FIREFOXMARIONETTE;
-
-            if("CHROME".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.GOOGLECHROME;
-
-            if("GOOGLECHROME".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.GOOGLECHROME;
-
-            if("IE".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.IE;
-
-            if("EDGE".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.EDGE;
-
-            if("SAUCELABS".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.SAUCELABS;
-
-            if("HTMLUNIT".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.HTMLUNIT;
-
-            // generic grid
-            if("GRID".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.GRID;
-
-            if("APPIUM".contentEquals(defaultBrowser))
-                useThisDriver = BrowserName.APPIUM;
-
-            // if none of the previous if statements were exercised then useThisDriver will
-            // still be none, this is the 'default' line from the Switch statement.
-            if(useThisDriver==null)
-                throw new RuntimeException("Unknown Browser in " + BROWSER_PROPERTY_NAME + ": " + defaultBrowser);
-
-            /* Code below requires Java 1.7 to switch on String
-            *  This would be my default way of writing the code, but have
-            *  not made it the default in this code base because people often compile
-            *  against 1.6 settings.
-            */
-            /*
             switch (defaultBrowser){
                 case "FIREFOX":
                     useThisDriver = BrowserName.FIREFOX;
                     break;
                 case "CHROME":
+                case "GOOGLECHROME":
                     useThisDriver = BrowserName.GOOGLECHROME;
+                    break;
+                case "EDGE":
+                    useThisDriver = BrowserName.EDGE;
                     break;
                 case "IE":
                     useThisDriver = BrowserName.IE;
@@ -160,7 +96,7 @@ public class Driver extends Thread{
                 default:
                     throw new RuntimeException("Unknown Browser in " + BROWSER_PROPERTY_NAME + ": " + defaultBrowser);
             }
-            */
+
 
         }
 
@@ -180,14 +116,6 @@ public class Driver extends Thread{
                     currentDriver = BrowserName.FIREFOX;
                     break;
 
-                case FIREFOXLEGACY:
-
-                    // use the legacy selenium driver with the built in firefox
-                    FirefoxOptions ffoptions = new FirefoxOptions();
-                    ffoptions.setLegacy(true);
-                    aDriver = new FirefoxDriver(ffoptions);
-                    currentDriver = BrowserName.FIREFOX;
-                    break;
 
                 case HTMLUNIT:
 
@@ -227,17 +155,8 @@ public class Driver extends Thread{
                     // https://code.google.com/p/chromedriver/issues/detail?id=799
                     options.addArguments("test-type");
 
-                    DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome();
 
-                    // http://stackoverflow.com/questions/26772793/org-openqa-selenium-unhandledalertexception-unexpected-alert-open
-                    //chromeCapabilities.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
-
-                    // convert theoptions to capabilities
-                    chromeCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
-
-
-
-                    aDriver = new ChromeDriver(chromeCapabilities);
+                    aDriver = new ChromeDriver(options);
                     currentDriver = BrowserName.GOOGLECHROME;
                     break;
 
@@ -258,32 +177,6 @@ public class Driver extends Thread{
                     currentDriver = BrowserName.SAUCELABS;
                     break;
 
-                case APPIUM:
-
-                    // quick hack code to get appium running
-                    // only one env variable, your APPIUM_DEVICE_NAME
-                    // so amend code for your local version
-
-                    DesiredCapabilities appiumCapabilities = new DesiredCapabilities();
-
-                    // the device name can be seen when you do "adb devices"
-                    appiumCapabilities.setCapability("deviceName", EnvironmentPropertyReader.getPropertyOrEnv("APPIUM_DEVICE_NAME", ""));
-                    appiumCapabilities.setCapability("platformName", Platform.ANDROID);
-                    appiumCapabilities.setCapability("app", EnvironmentPropertyReader.getPropertyOrEnv("APPIUM_BROWSER", "browser"));
-
-
-                    try {
-                        // add url to environment variables to avoid releasing with source
-                        String appiumURL = "http://127.0.0.1:4723/wd/hub";
-                        aDriver = new RemoteWebDriver(
-                                        new URL(appiumURL),
-                                        appiumCapabilities);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-
-                    currentDriver = BrowserName.APPIUM;
-                    break;
 
                 case GRID:
 
@@ -379,8 +272,6 @@ public class Driver extends Thread{
 
      */
     public static BrowserName currentBrowser(){
-
-        // TODO: handle marionette in grid
 
         if(currentDriver == Driver.BrowserName.GRID){
             // get the current browser from the property or environment
