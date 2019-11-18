@@ -42,12 +42,6 @@
 
         </dependency>
 
-
-        <!-- from WebDriver 2.53.0 HTMLUnit is no longer distributed with Selenium WebDriver -->
-        <!-- https://github.com/SeleniumHQ/htmlunit-driver -->
-        <!-- need to bring in the htmlunit driver on its own -->
-        <!-- https://github.com/SeleniumHQ/selenium/blob/master/java/CHANGELOG -->
-        <!-- Added HTMLUnit After Selenium in the pom.xml to reduce risk of dependency clash -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>htmlunit-driver</artifactId>
@@ -74,10 +68,12 @@
 
     <!-- examples of how to use the properties from the command line -->
     <!-- mvn test
-        will run the tests using firefox -->
+        will run the tests using default browser configured in Driver.java -->
 
     <!-- mvn test -Dselenium2basics.webdriver=CHROME
                 will run the tests using CHROME -->
+    <!-- mvn test -Dselenium2basics.webdriver=FIREFOX
+                will run the tests using FIREFOX -->
     <!-- mvn test -Dselenium2basics.webdriver=IE
                 will run the tests that should pass on CHROME using IE -->
     <!-- mvn test -DWEBDRIVER_GRID_URL=http://id@ondemand.saucelabs.com:80/wd/hub -DWEBDRIVER_GRID_BROWSER=firefox -DWEBDRIVER_GRID_BROWSER_VERSION=39.0 -DWEBDRIVER_GRID_BROWSER_PLATFORM="Windows 7"
