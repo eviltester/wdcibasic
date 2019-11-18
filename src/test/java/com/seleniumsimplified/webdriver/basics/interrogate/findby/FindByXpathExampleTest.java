@@ -2,6 +2,8 @@ package com.seleniumsimplified.webdriver.basics.interrogate.findby;
 
 import com.seleniumsimplified.webdriver.manager.Driver;
 import com.seleniumsimplified.webdriver.manager.TestEnvironment;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -18,16 +20,10 @@ public class FindByXpathExampleTest {
 
     @BeforeClass
     public static void createDriverAndVisitTestPage(){
-        driver = Driver.get(TestEnvironment.getUrl("find_by_playground.php"));
-    }
-
-    @Test
-    public void assertNumberOfParagraphs(){
-
-        List<WebElement> elements;
-        elements = driver.findElements(By.xpath("//p"));
-
-        assertEquals(41, elements.size());
+        driver = Driver.get();
+        driver.get(TestEnvironment.getUrl("/styled/find-by-playground-test.html"));
+        // old version
+        //driver = Driver.get(TestEnvironment.getUrl("find_by_playground.php"));
     }
 
     @Test
@@ -64,6 +60,11 @@ public class FindByXpathExampleTest {
         assertEquals("Expected matching id",
                      "a26",
                      element.getAttribute("id"));
+    }
+
+    @AfterClass
+    public static void closeDriver(){
+        driver.close();
     }
 
 }

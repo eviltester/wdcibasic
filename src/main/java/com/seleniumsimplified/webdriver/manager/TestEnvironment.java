@@ -11,14 +11,24 @@ public class TestEnvironment {
 
         if(url==null){
             try {
+                // newest test pages are deployed online at
+                // https://testpages.herokuapp.com
+                // or you can download as an app from
+                // https://github.com/eviltester/TestingApp
+                // and you would want a release for a version of
+                // seleniumtestpages-x-x-x-jar-with-dependencies.jar
+                // where x-x-x is a version number
+                url = new URL(EnvironmentPropertyReader.getPropertyOrEnv("seleniumsimplified.environment",
+                        "https://testpages.herokuapp.com"));
+                //
+                // older versions of the test pages are at
                 // test pages are located at
                 // http://compendiumdev.co.uk/selenium/testpages/
                 // http://compendiumdev.co.uk/selenium/
                 // http://seleniumsimplified.com/testpages/
-                // or you can download and install for yourself from
-                //    https://github.com/eviltester/seleniumTestPages
-                //    either as a java app which you can run and connect to on localhost:4567 or as a set of html and php pages
-                url = new URL(EnvironmentPropertyReader.getPropertyOrEnv("seleniumsimplified.environment", "http://compendiumdev.co.uk/selenium/testpages/"));
+//                url = new URL(EnvironmentPropertyReader.getPropertyOrEnv("seleniumsimplified.environment",
+//                        "http://compendiumdev.co.uk/selenium/testpages/"));
+
             } catch (MalformedURLException e) {
                 throw new RuntimeException(String.format("You have an invalid url in the property or environment variable %s", url));
             }

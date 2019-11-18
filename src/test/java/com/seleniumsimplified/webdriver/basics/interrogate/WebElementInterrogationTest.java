@@ -16,11 +16,14 @@ public class WebElementInterrogationTest {
 
         final WebDriver driver;
 
-        driver = Driver.get(TestEnvironment.getUrl("basic_web_page.html"));
+        driver = Driver.get(TestEnvironment.getUrl("/styled/basic-web-page-test.html"));
+        // old version
+        //driver = Driver.get(TestEnvironment.getUrl("basic_web_page.html"));
 
         WebElement para1 = driver.findElement(By.id("para1"));
 
         assertEquals(para1.getText(),"A paragraph of text");
 
+        driver.close();
     }
 }

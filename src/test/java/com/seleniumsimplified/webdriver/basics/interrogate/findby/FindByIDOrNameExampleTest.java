@@ -2,6 +2,7 @@ package com.seleniumsimplified.webdriver.basics.interrogate.findby;
 
 import com.seleniumsimplified.webdriver.manager.Driver;
 import com.seleniumsimplified.webdriver.manager.TestEnvironment;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -18,7 +19,11 @@ public class FindByIDOrNameExampleTest {
 
     @BeforeClass
     public static void createDriverAndVisitTestPage(){
-        driver = Driver.get(TestEnvironment.getUrl("find_by_playground.php"));
+
+        driver = Driver.get();
+        driver.get(TestEnvironment.getUrl("/styled/find-by-playground-test.html"));
+        // old version
+        //driver = Driver.get(TestEnvironment.getUrl("find_by_playground.php"));
         driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
     }
 
@@ -47,4 +52,10 @@ public class FindByIDOrNameExampleTest {
                 "pName3",
                 element.getAttribute("name"));
     }
+
+    @AfterClass
+    public static void closeDriver(){
+        driver.close();
+    }
+
 }

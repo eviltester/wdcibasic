@@ -18,7 +18,10 @@ public class ManipulateExampleTest {
     @BeforeClass
     public static void createDriverAndVisitTestPage(){
 
-        driver = Driver.get(TestEnvironment.getUrl("basic_html_form.html"));
+        driver = Driver.get();
+        driver.get(TestEnvironment.getUrl("/styled/basic-html-form-test.html"));
+        // old version
+        //driver = Driver.get(TestEnvironment.getUrl("basic_html_form.html"));
     }
 
     @Test

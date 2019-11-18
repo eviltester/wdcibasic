@@ -2,6 +2,7 @@ package com.seleniumsimplified.webdriver.basics.interrogate.findby;
 
 import com.seleniumsimplified.webdriver.manager.Driver;
 import com.seleniumsimplified.webdriver.manager.TestEnvironment;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -19,7 +20,11 @@ public class FindByCssSelectorExampleTest {
     @BeforeClass
     public static void createDriverAndVisitTestPage(){
         //driver = new FirefoxDriver();
-        driver = Driver.get(TestEnvironment.getUrl("find_by_playground.php"));
+
+        driver = Driver.get();
+        driver.get(TestEnvironment.getUrl("/styled/find-by-playground-test.html"));
+        // old version
+        //driver = Driver.get(TestEnvironment.getUrl("find_by_playground.php"));
     }
 
     @Test
@@ -34,16 +39,9 @@ public class FindByCssSelectorExampleTest {
                 element.getAttribute("name"));
     }
 
-    @Test
-    public void findElementsUsingCSSTag(){
-
-        List<WebElement> elements;
-        elements = driver.findElements(
-                        By.cssSelector("p"));
-
-        assertEquals("expected a different number",
-                        41,
-                        elements.size());
+    @AfterClass
+    public static void closeDriver(){
+        driver.close();
     }
 
 }

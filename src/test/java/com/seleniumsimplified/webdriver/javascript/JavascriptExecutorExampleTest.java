@@ -14,7 +14,10 @@ public class JavascriptExecutorExampleTest {
 
     @Test
     public void callAJavaScriptFunctionOnThePage(){
-        WebDriver driver = Driver.get(TestEnvironment.getUrl("canvas_basic.html"));
+        WebDriver driver;
+        driver = Driver.get(TestEnvironment.getUrl("styled/canvas-javascript-test.html"));
+        // Old Version
+        // driver = Driver.get(TestEnvironment.getUrl("canvas_basic.html"));
 
         JavascriptExecutor js =(JavascriptExecutor)driver;
 
@@ -27,6 +30,8 @@ public class JavascriptExecutorExampleTest {
         actionsCount = driver.findElements(
                                 By.cssSelector("#commandlist li")).size();
         assertEquals("Calling draw should add an action", 3, actionsCount);
+
+        driver.close();
     }
 
 

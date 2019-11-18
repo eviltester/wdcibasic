@@ -13,7 +13,11 @@ public class CookiesExampleTest {
     @Test
     public void visitSearchPageAndCheckNoLastSearchCookie(){
 
-        WebDriver driver = Driver.get(TestEnvironment.getUrl("search.php"));
+        WebDriver driver;
+        driver = Driver.get();
+        driver.get(TestEnvironment.getUrl("/styled/search"));
+        // old version
+        // driver = Driver.get(TestEnvironment.getUrl("search.php"));
 
         driver.manage().deleteAllCookies();
 
@@ -22,5 +26,7 @@ public class CookiesExampleTest {
         Cookie aCookie = driver.manage().getCookieNamed("SeleniumSimplifiedLastSearch");
 
         assertEquals("Should be no last search cookie", null, aCookie);
+
+        driver.close();
     }
 }
