@@ -19,6 +19,7 @@ import org.junit.runners.Suite;
         AFirstFindByExampleTest.class,
         ChainingFindByExampleTest.class,
         FindByCssSelectorExampleTest.class,
+        FindByCSSSelectorPathsExampleTest.class,
         FindByIDOrNameExampleTest.class,
         FindByXpathExampleTest.class,
         FindElementsExampleTest.class,
